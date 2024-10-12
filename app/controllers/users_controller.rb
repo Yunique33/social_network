@@ -3,7 +3,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    @posts = @user.posts.order(created_at: :desc)
+    @posts = visible_posts_for(@user)
   end
 
   def index
@@ -20,5 +20,14 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     current_user.followees.delete(@user)
     redirect_to @user, notice: 'You have unfollowed this user.'
+  end
+
+  private
+
+  def visible_posts_for(user)
+    if user_signed_in?
+      return user.posts.order(created_at: :desc) if user == current_user || current_user.following?(user)
+    end
+    user.posts.none
   end
 end

@@ -10,4 +10,8 @@ class User < ApplicationRecord
   has_many :followees, through: :subscriptions, source: :followee
   has_many :reverse_subscriptions, foreign_key: :followee_id, class_name: 'Subscription', dependent: :destroy
   has_many :followers, through: :reverse_subscriptions, source: :follower
+
+  def following?(other_user)
+    followees.include?(other_user)
+  end
 end

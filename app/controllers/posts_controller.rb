@@ -1,14 +1,17 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
+  before_action :set_post, only: [:show, :edit, :destroy]
 
   def index
     @posts = Post.all.order(created_at: :desc)
   end
 
   def show
-    @post = Post.find(params[:id])
-    @comment = Comment.new
-    @comments = @post.comments.where(parent_id: nil)
+    if authorized_to_view_post?
+      render :show
+    else
+      redirect_to new_user_session_path, alert: "You need to sign in or follow the user to view this post."
+    end
   end
 
   def new
@@ -34,5 +37,13 @@ class PostsController < ApplicationController
 
   def post_params
     params.require(:post).permit(:title, :body)
+  end
+
+  def authorized_to_view_post?
+    @post.user == current_user || (user_signed_in? && current_user.following?(@post.user))
+  end
+
+  def set_post
+    @post = Post.find(params[:id])
   end
 end
