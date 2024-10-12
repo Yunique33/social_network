@@ -1,14 +1,25 @@
-%h1 Posts
+%h1 Your Posts
 
-= link_to 'New Post', new_post_path, class: 'btn btn-primary' if user_signed_in?
+= link_to 'New Post', new_post_path, class: 'btn btn-primary'
 
 .posts
-  - @posts.each do |post|
-    .post
-      %h2= link_to post.title, post_path(post)
-      %p= truncate(post.body, length: 200)
-      %small
-        Posted by #{post.user.email} at #{post.created_at.strftime('%B %d, %Y %H:%M')}
-      - if user_signed_in? && current_user == post.user
+  - if @posts.any?
+    - @posts.each do |post|
+      .post
+        %h2= link_to post.title, post_path(post)
+        %p= truncate(post.body, length: 200)
+        %small
+          Posted at #{post.created_at.strftime('%B %d, %Y %H:%M')}
         = link_to 'Edit', edit_post_path(post), class: 'btn btn-sm btn-secondary'
         = link_to 'Delete', post_path(post), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger'
+  - else
+    %p You haven't created any posts yet.
+
+- if @total_pages > 1
+  .pagination
+    - if @page > 1
+      = link_to 'Previous', posts_path(page: @page - 1), class: 'btn btn-secondary'
+    - if @page < @total_pages
+      = link_to 'Next', posts_path(page: @page + 1), class: 'btn btn-secondary'
+    %p
+      Page #{@page} of #{@total_pages}

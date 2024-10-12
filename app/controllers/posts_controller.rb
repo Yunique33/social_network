@@ -2,8 +2,19 @@ class PostsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_post, only: [:show, :edit, :destroy]
 
+  POSTS_PER_PAGE = 20
+
   def index
-    @posts = Post.all.order(created_at: :desc)
+    if user_signed_in?
+      @page = [params[:page].to_i, 1].max
+      @posts = current_user.posts
+                           .order(created_at: :desc)
+                           .offset((@page - 1) * POSTS_PER_PAGE)
+                           .limit(POSTS_PER_PAGE)
+      @total_pages = (current_user.posts.count.to_f / POSTS_PER_PAGE).ceil
+    else
+      redirect_to new_user_session_path, alert: "Please sign in to view your posts."
+    end
   end
 
   def show
