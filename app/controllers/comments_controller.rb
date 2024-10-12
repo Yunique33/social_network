@@ -1,22 +1,39 @@
 class CommentsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_post
 
   def create
-    @post = Post.find(params[:post_id])
     @comment = @post.comments.build(comment_params)
     @comment.user = current_user
-    @comment.parent_id = params[:parent_id] if params[:parent_id].present?
 
     if @comment.save
-      redirect_to @post, notice: 'Comment added successfully.'
+      if @comment.parent_id
+        render @comment
+      else
+        redirect_to @post, notice: 'Comment was successfully added.'
+      end
     else
-      redirect_to @post, alert: 'Failed to add comment.'
+      redirect_to @post, alert: 'Error adding comment.'
+    end
+  end
+
+  def destroy
+    @comment = @post.comments.find(params[:id])
+    if @comment.user == current_user
+      @comment.destroy
+      redirect_to @post, notice: 'Comment was successfully deleted.'
+    else
+      redirect_to @post, alert: 'You are not authorized to delete this comment.'
     end
   end
 
   private
 
+  def set_post
+    @post = Post.find(params[:post_id])
+  end
+
   def comment_params
-    params.require(:comment).permit(:body)
+    params.require(:comment).permit(:body, :parent_id)
   end
 end

@@ -1,8 +1,5 @@
 %h1= @post.title
-
-.post-content
-  = simple_format(@post.body)
-
+%p= @post.body
 %small
   Posted by #{@post.user.email} at #{@post.created_at.strftime('%B %d, %Y %H:%M')}
 
@@ -11,9 +8,9 @@
   = link_to 'Delete', post_path(@post), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger'
 
 %h2 Comments
+= render @post.comments.where(parent_id: nil)
 
-.comments
-  = render @comments
-
-%h3 Add a comment
-= render 'comments/form', post: @post, comment: @comment
+%h3 Add a comment:
+= form_with(model: [@post, Comment.new], local: true) do |form|
+  = form.text_area :body, rows: 3, class: 'form-control'
+  = form.submit 'Add Comment', class: 'btn btn-primary'

@@ -1,9 +1,9 @@
-.comment
+.comment{id: "comment-#{comment.id}", style: "margin-left: #{comment.parent_id ? '20px' : '0'}"}
   %p= comment.body
   %small
     Commented by #{comment.user.email} at #{comment.created_at.strftime('%B %d, %Y %H:%M')}
   - if user_signed_in? && current_user == comment.user
-    = link_to 'Delete', [comment.post, comment], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger'
+    = link_to 'Delete', post_comment_path(comment.post, comment), method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger'
   - if user_signed_in?
     = link_to 'Reply', '#', class: 'reply-link', data: { comment_id: comment.id }
 
@@ -13,6 +13,5 @@
       = form.text_area :body, rows: 3, class: 'form-control'
       = form.submit 'Reply', class: 'btn btn-primary'
 
-  - if comment.replies.any?
-    .replies
-      = render comment.replies
+  .replies{id: "replies-#{comment.id}"}
+    = render comment.replies
