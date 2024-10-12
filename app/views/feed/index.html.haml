@@ -1,0 +1,16 @@
+%h1 Your Feed
+
+- if @posts.any?
+  - @posts.each do |post|
+    .post
+      %h2= link_to post.title, post_path(post)
+      %p= truncate(post.body, length: 200)
+      %small
+        Posted by #{link_to post.user.email, user_path(post.user)} at #{post.created_at.strftime('%B %d, %Y %H:%M')}
+      %p
+        = pluralize(post.comments.count, 'comment')
+- else
+  %p You're not following anyone yet, or the people you follow haven't posted anything.
+  = link_to 'Find users to follow', users_path
+
+= paginate @posts # Если вы используете kaminari для пагинации

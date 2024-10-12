@@ -1,0 +1,19 @@
+%h1= @post.title
+
+.post-content
+  = simple_format(@post.body)
+
+%small
+  Posted by #{@post.user.email} at #{@post.created_at.strftime('%B %d, %Y %H:%M')}
+
+- if user_signed_in? && current_user == @post.user
+  = link_to 'Edit', edit_post_path(@post), class: 'btn btn-secondary'
+  = link_to 'Delete', post_path(@post), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger'
+
+%h2 Comments
+
+.comments
+  = render @comments
+
+%h3 Add a comment
+= render 'comments/form', post: @post, comment: @comment

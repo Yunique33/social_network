@@ -1,0 +1,14 @@
+%h1 Posts
+
+= link_to 'New Post', new_post_path, class: 'btn btn-primary' if user_signed_in?
+
+.posts
+  - @posts.each do |post|
+    .post
+      %h2= link_to post.title, post_path(post)
+      %p= truncate(post.body, length: 200)
+      %small
+        Posted by #{post.user.email} at #{post.created_at.strftime('%B %d, %Y %H:%M')}
+      - if user_signed_in? && current_user == post.user
+        = link_to 'Edit', edit_post_path(post), class: 'btn btn-sm btn-secondary'
+        = link_to 'Delete', post_path(post), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger'

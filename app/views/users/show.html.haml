@@ -1,0 +1,24 @@
+%h1= @user.email
+
+- if user_signed_in? && current_user != @user
+  - if current_user.followees.include?(@user)
+    = button_to 'Unfollow', unfollow_user_path(@user), method: :delete
+  - else
+    = button_to 'Follow', follow_user_path(@user), method: :post
+
+%h2 Posts
+- @posts.each do |post|
+  .post
+    %h3= link_to post.title, post
+    %p= truncate(post.body, length: 100)
+    %small Posted at #{post.created_at}
+
+%h2 Followers
+%ul
+  - @user.followers.each do |follower|
+    %li= link_to follower.email, user_path(follower)
+
+%h2 Following
+%ul
+  - @user.followees.each do |followee|
+    %li= link_to followee.email, user_path(followee)
