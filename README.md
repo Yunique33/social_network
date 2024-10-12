@@ -1,24 +1,30 @@
-# README
+# Social Network
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is a Ruby on Rails 7 application that implements a basic social network.
 
-Things you may want to cover:
+## Features
 
-* Ruby version
+- User registration and authentication using Devise
+- Creating and deleting posts
+- Commenting on posts with nested comments
+- Following other users
+- Feed of posts from followed users
 
-* System dependencies
+## Setup
 
-* Configuration
+1. Clone the repository
+2. Run `bundle install`
+3. Setup the database with `rails db:create db:migrate`
+4. Start the server with `rails server`
 
-* Database creation
+## Running tests
 
-* Database initialization
+Run `rspec` to execute the test suite.
 
-* How to run the test suite
+## Technologies used
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+- Ruby on Rails 7
+- PostgreSQL
+- Devise 4.9
+- HAML
+- RSpec
