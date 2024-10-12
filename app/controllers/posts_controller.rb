@@ -13,7 +13,7 @@ class PostsController < ApplicationController
                            .limit(POSTS_PER_PAGE)
       @total_pages = (current_user.posts.count.to_f / POSTS_PER_PAGE).ceil
     else
-      redirect_to new_user_session_path, alert: "Please sign in to view your posts."
+      redirect_to new_user_session_path
     end
   end
 

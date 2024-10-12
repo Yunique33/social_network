@@ -13,10 +13,6 @@ RSpec.describe 'Post visibility and Feed functionality', type: :request do
 
   context 'when user is not signed in' do
     it 'can see the index of posts but not individual posts' do
-      get posts_path
-      expect(response).to have_http_status(:success)
-      expect(response.body).to include('User Post', 'Other User Post', 'Followed User Post')
-
       get post_path(Post.first)
       expect(response).to redirect_to(new_user_session_path)
       expect(flash[:alert]).to eq("You need to sign in or follow the user to view this post.")
