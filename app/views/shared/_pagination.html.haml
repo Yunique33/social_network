@@ -1,8 +1,8 @@
 - if total_pages && total_pages > 1
   .pagination
     - if page && page > 1
-      = link_to 'Previous', feed_path(page: page - 1), class: 'btn btn-secondary'
+      = link_to 'Previous', feed_path(page: page - 1)
     - if page && total_pages && page < total_pages
-      = link_to 'Next', feed_path(page: page + 1), class: 'btn btn-secondary'
+      = link_to 'Next', feed_path(page: page + 1)
     %p
       Page #{page} of #{total_pages}

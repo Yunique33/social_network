@@ -3,19 +3,12 @@ class CommentsController < ApplicationController
   before_action :set_post
 
   def create
-    @comment = @post.comments.build(comment_params)
-    @comment.user = current_user
+    @comment = @post.comments.build(comment_params.merge(user: current_user))
 
-    if @comment.save
-      if @comment.parent_id
-        render @comment
-      else
-        redirect_to @post, notice: 'Comment was successfully added.'
-      end
-    else
-      redirect_to @post, alert: 'Error adding comment.'
-    end
+    flash[:alert] = 'Error adding comment.' unless @comment.save
+    redirect_to @post
   end
+
 
   def destroy
     @comment = @post.comments.find(params[:id])

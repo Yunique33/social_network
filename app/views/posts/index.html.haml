@@ -10,8 +10,8 @@
         %p= truncate(post.body, length: 200)
         %small
           Posted at #{post.created_at.strftime('%B %d, %Y %H:%M')}
-        = link_to 'Edit', edit_post_path(post), class: 'btn btn-sm btn-secondary'
-        = link_to 'Delete', post_path(post), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger'
+        = link_to 'Edit', edit_post_path(post)
+        = link_to 'Delete', post_path(post), method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }
   - else
     %p You haven't created any posts yet.
 

@@ -3,15 +3,15 @@
   %small
     Commented by #{comment.user.email} at #{comment.created_at.strftime('%B %d, %Y %H:%M')}
   - if user_signed_in? && current_user == comment.user
-    = link_to 'Delete', post_comment_path(comment.post, comment), method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger'
+    = link_to 'Delete', post_comment_path(comment.post, comment), method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }
   - if user_signed_in?
     = link_to 'Reply', '#', class: 'reply-link', data: { comment_id: comment.id }
 
   .reply-form{id: "reply-form-#{comment.id}", style: 'display: none;'}
-    = form_with(model: [comment.post, Comment.new], local: true) do |form|
+    = form_with(model: [comment.post, Comment.new], remote: true) do |form|
       = form.hidden_field :parent_id, value: comment.id
-      = form.text_area :body, rows: 3, class: 'form-control'
-      = form.submit 'Reply', class: 'btn btn-primary'
+      = form.text_area :body, rows: 3
+      = form.submit 'Reply'
 
   .replies{id: "replies-#{comment.id}"}
     = render comment.replies
