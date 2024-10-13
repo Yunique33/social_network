@@ -1,6 +1,7 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :set_post, only: [:show, :edit, :destroy]
+  before_action :set_post, only: [:show, :edit, :update, :destroy]
+  before_action :ensure_owner, only: [:edit, :update, :destroy]
 
   POSTS_PER_PAGE = 20
 
@@ -38,8 +39,17 @@ class PostsController < ApplicationController
     end
   end
 
+  def edit; end
+
+  def update
+    if @post.update(post_params)
+      redirect_to @post, notice: 'Post was successfully updated.'
+    else
+      render :edit
+    end
+  end
+
   def destroy
-    @post = current_user.posts.find(params[:id])
     @post.destroy
     redirect_to posts_path, notice: 'Post was successfully deleted.'
   end
@@ -56,5 +66,11 @@ class PostsController < ApplicationController
 
   def set_post
     @post = Post.find(params[:id])
+  end
+
+  def ensure_owner
+    unless @post && @post.user == current_user
+      redirect_to posts_path, alert: 'You are not authorized to perform this action.'
+    end
   end
 end

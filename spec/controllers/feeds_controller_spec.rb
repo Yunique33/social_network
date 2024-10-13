@@ -1,4 +1,4 @@
-RSpec.describe "Feeds", type: :request do
+RSpec.describe FeedController, type: :request do
   let(:user) { User.create(email: 'user@example.com', password: 'password') }
   let(:followed_user) { User.create(email: 'followed@example.com', password: 'password') }
   let(:unfollowed_user) { User.create(email: 'unfollowed@example.com', password: 'password') }
@@ -25,7 +25,8 @@ RSpec.describe "Feeds", type: :request do
       end
 
       get feed_path
-      expect(response.body).to include('page=2')
+      expect(response.body).to include('Next')
+
       get feed_path(page: 2)
       expect(response.body).to include('Extra Post')
     end

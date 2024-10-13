@@ -13,11 +13,4 @@
   %p You're not following anyone yet, or the people you follow haven't posted anything.
   = link_to 'Find users to follow', users_path
 
-.pagination
-  - if @page > 1
-    = link_to 'Previous', feed_path(page: @page - 1)
-  - if @page < @total_pages
-    = link_to 'Next', feed_path(page: @page + 1)
-  %p
-    Page #{@page} of #{@total_pages}
-    
+= render 'shared/pagination', page: @page, total_pages: @total_pages

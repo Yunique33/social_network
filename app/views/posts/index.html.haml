@@ -15,11 +15,4 @@
   - else
     %p You haven't created any posts yet.
 
-- if @total_pages > 1
-  .pagination
-    - if @page > 1
-      = link_to 'Previous', posts_path(page: @page - 1), class: 'btn btn-secondary'
-    - if @page < @total_pages
-      = link_to 'Next', posts_path(page: @page + 1), class: 'btn btn-secondary'
-    %p
-      Page #{@page} of #{@total_pages}
+= render 'shared/pagination', page: @page, total_pages: @total_pages
